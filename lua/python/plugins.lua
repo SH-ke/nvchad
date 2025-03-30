@@ -22,10 +22,8 @@ local plugins = {
   },
   {
     "mfussenegger/nvim-dap",
-    -- config = function(_, opts)
     config = function()
       require("dap")
-      -- require("core.utils").load_mappings("dap")
     end
   },
   {
@@ -51,46 +49,13 @@ local plugins = {
     end,
   },
   {
-    "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "black",
-        "debugpy",
-        "mypy",
-        "ruff",
-        "pylsp",
-        "python-lsp-server",
-        "clangd",
-        "clang-format",
-        "codelldb",
-      },
-      run_on_start = true,
-      log_level = vim.log.levels.DEBUG,
-    },
-  },
-  {
     "neovim/nvim-lspconfig",
     config = function()
       require "configs.lspconfig"
       require "python.lspconfig"
     end,
   },
-  {
-  	"nvim-treesitter/nvim-treesitter",
-  	opts = {
-  		ensure_installed = {
-  			"vim", "lua", "vimdoc",
-        "html", "css",
-        "bash",
-        "c",
-        "json",
-        "markdown",
-        "python",
-        "rust",
-  		},
-  	},
-  },
-}
+} -- plugins
 -- print(vim.inspect(plugins[#plugins-2].opts.ensure_installed))
 
 return plugins

@@ -41,3 +41,4 @@ map("n", "<leader>dpl", function()
     local new_level = current_level == "DEBUG" and "INFO" or "DEBUG"
     require('dap-python').set_log_level(new_level)
 end)
+

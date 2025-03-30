@@ -1,21 +1,25 @@
--- local config = require("configs.lspconfig")
-require("nvchad.configs.lspconfig").defaults()
-local nvlsp = require "nvchad.configs.lspconfig"
-
 local lspconfig = require("lspconfig")
 
-local servers = {
-  -- "pyright",
-  -- "python-lsp-server",
-  "pylsp",
-  "ruff",
-}
+-- 配置 pylsp
+lspconfig.pylsp.setup({
+  settings = { pylsp = {
+    plugins = {
+      -- 启用 python-rope 插件
+      rope_autoimport = { enabled = true },
+      rope_completion = { enabled = true },
+    },
+    -- 其他插件配置，如 flake8、yapf 等
+    flake8 = {
+      enabled = true,
+      maxLineLength = 120
+    },
+    black = {
+      enabled = true
+    }
+  }}, -- settings
+  -- 确保附加到 Python 文件类型
+  filetypes = { "python" },
+})
 
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup({
-    capabilities = nvlsp.capabilities,
-    on_attach = nvlsp.on_attach,
-    on_init = nvlsp.on_init,
-    filetypes = {"python"},
-  })
-end
+
+return plugins

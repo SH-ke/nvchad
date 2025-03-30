@@ -37,6 +37,6 @@ add_plugins(c_plug)
 -- -- 构建 :MasonInstall 命令并执行
 -- local install_cmd = "MasonInstall " .. table.concat(opts.ensure_installed, " ")
 -- print(vim.inspect(install_cmd))
--- -- vim.cmd(install_cmd)
+-- vim.cmd(install_cmd)
 
 return plugins
