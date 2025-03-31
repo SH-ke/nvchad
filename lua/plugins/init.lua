@@ -31,12 +31,4 @@ add_plugins(py_plug)
 local c_plug = require('cpp.plugins')
 add_plugins(c_plug)
 
--- local opts = plugins[#plugins-2].opts
--- -- 打印 ensure_installed 列表内容
--- print(vim.inspect(opts.ensure_installed))
--- -- 构建 :MasonInstall 命令并执行
--- local install_cmd = "MasonInstall " .. table.concat(opts.ensure_installed, " ")
--- print(vim.inspect(install_cmd))
--- vim.cmd(install_cmd)
-
 return plugins
