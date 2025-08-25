@@ -37,15 +37,15 @@ lua/
 ├── mappings.lua      <-- 全局按键映射
 ├── options.lua       <-- 全局 Neovim 设置 (vim.opt)
 ├── plugins/
-│   ├── init.lua      <-- 通用 UI/核心插件列表
-│   ├── lang/         <-- 语言隔离配置目录 (核心)
-│   │   ├── cpp.lua   <-- C/C++ (clangd, codelldb)
-│   │   ├── golang.lua<-- Golang (gopls, delve)
-│   │   ├── misc.lua  <-- Rust, Typst, LaTeX, Markdown
-│   │   ├── python.lua<-- Python (pylsp, debugpy)
-│   │   └── web.lua   <-- HTML, CSS, JSON
-│   └── mason.lua     <-- Mason 工具安装列表
-│   └── treesitter.lua<-- Treesitter 语言解析配置
+│   ├── init.lua      <-- 通用 UI/核心插件列表
+│   ├── lang/         <-- 语言隔离配置目录 (核心)
+│   │   ├── cpp.lua   <-- C/C++ (clangd, codelldb)
+│   │   ├── golang.lua<-- Golang (gopls, delve)
+│   │   ├── misc.lua  <-- Rust, Typst, LaTeX, Markdown
+│   │   ├── python.lua<-- Python (pylsp, debugpy)
+│   │   └── web.lua   <-- HTML, CSS, JSON
+│   └── mason.lua     <-- Mason 工具安装列表
+│   └── treesitter.lua<-- Treesitter 语言解析配置
 └── init.lua          <-- 入口文件，负责加载和合并所有模块
 ```
 
@@ -56,13 +56,54 @@ lua/
   * **Neovim v0.9.0+**
   * **Git**
   * **LuaJIT (推荐)**
-  * **外部工具：** 确保您系统上安装了 `tree-sitter` CLI (用于编译解析器)。
+  * **外部工具：** 确保您系统上安装了 `tree-sitter` CLI (用于编译解析器)。 
+
+### 安装 Tree-sitter CLI
+
+**强烈推荐使用 Cargo (Rust 包管理器) 安装：**
+
+```bash
+# 如果您尚未安装 Rust 和 Cargo，请先安装：
+# https://rustup.rs/
+cargo install tree-sitter-cli
+```
+
+**各系统特定方法：**
+
+*   **Arch Linux (通过 AUR，推荐)：**
+    ```bash
+    # 使用 yay 或 paru 等 AUR 助手
+    yay -S tree-sitter-cli
+    # 或
+    paru -S tree-sitter-cli
+    ```
+
+*   **Arch Linux / Linux (通过 npm)：**
+    ```bash
+    # 确保已安装 Node.js 和 npm
+    sudo npm install -g tree-sitter-cli
+    ```
+
+*   **Windows 11：**
+    ```bash
+    # 1. 通过 Cargo (推荐)
+    cargo install tree-sitter-cli
+
+    # 2. 或通过 npm
+    npm install -g tree-sitter-cli
+
+    # 如果 npm 安装失败，可能需要安装 Windows 构建工具
+    # 以管理员身份运行 PowerShell 并执行：
+    npm install --global windows-build-tools
+    ```
 
 ### 步骤
 
 1.  **克隆配置：**
     ```bash
     git clone https://github.com/SH-ke/nvchad.git ~/.config/nvim
+    # 特别的，在 Windows 上，请使用：
+    git clone https://github.com/SH-ke/nvchad.git ~/AppData/Local/nvim
     ```
 2.  **启动 Neovim：**
     第一次启动 Neovim 时，`lazy.nvim` 将自动安装所有插件。
