@@ -1,5 +1,4 @@
 local plugins = {
-  -- Run the MasonInstallAll command
   "williamboman/mason.nvim",
   install_root_dir = vim.fn.stdpath("data") .. "/mason",
   opts = {
@@ -13,6 +12,9 @@ local plugins = {
       "clangd",
       "clang-format",
       "codelldb",
+      "gopls",        -- Golang LSP
+      "goimports",    -- Golang 格式化/导入
+      "delve",        -- Golang 调试器
     },
     run_on_start = true,
     log_level = vim.log.levels.DEBUG,

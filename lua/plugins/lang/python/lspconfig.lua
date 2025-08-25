@@ -1,3 +1,5 @@
+-- lua/plugins/lang/python/lspconfig.lua
+-- 注意：这里仅放置 Python 特定的 lspconfig，不影响 init.lua 中加载的核心 lspconfig
 local lspconfig = require("lspconfig")
 
 -- 配置 pylsp
@@ -20,6 +22,3 @@ lspconfig.pylsp.setup({
   -- 确保附加到 Python 文件类型
   filetypes = { "python" },
 })
-
-
-return plugins

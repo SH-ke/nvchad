@@ -47,7 +47,7 @@ map("n", "<leader>bh", ":BufferLineCloseLeft<CR>")  -- 所有 左侧 buffer
 -- map("n", "<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr>", { desc = "ToggleTerm horizontal split" })
 -- map("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "ToggleTerm float" })
 -- map("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", { desc = "ToggleTerm vertical split" })
-require "python.mappings"
+require "plugins.lang.python.mappings"
 
 -- map("n", "<leader>sv", "<C-w>v") -- 水平新增窗口，以 `<leader>` 键作为引导键，按下 `<leader>sv` 执行水平分割窗口操作
 -- map("n", "<leader>sh", "<C-w>s") -- 垂直新增窗口，按下 `<leader>sh` 执行垂直分割窗口操作
