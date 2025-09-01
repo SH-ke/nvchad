@@ -27,6 +27,7 @@ require("lazy").setup({
   },
 
   { import = "plugins" },
+  { require("plugins.lang.go") },
 }, lazy_config)
 
 -- load theme

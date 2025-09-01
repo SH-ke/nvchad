@@ -36,10 +36,10 @@ add_plugins(base_plugins)
 
 -- 加载语言隔离插件
 add_plugins(require('plugins.lang.python'))
--- add_plugins(require('plugins.lang.cpp'))
-add_plugins(require('plugins.lang.golang'))
--- add_plugins(require('plugins.lang.web'))
--- add_plugins(require('plugins.lang.misc'))
+add_plugins(require('plugins.lang.cpp'))
+-- add_plugins(require('plugins.lang.go'))
+add_plugins(require('plugins.lang.web'))
+add_plugins(require('plugins.lang.misc'))
 
 -- 注意：原始文件中的以下内容需要移到 plugins/init.lua 中
 -- local plugins = {
