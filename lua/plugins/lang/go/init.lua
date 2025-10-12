@@ -1,20 +1,20 @@
+-- 整合所有配置入口，保持插件定义与配置分离
 local M = {}
 
--- Your setup function remains the same
 function M.setup()
-  vim.api.nvim_create_autocmd("FileType", {
-    pattern = "go",
-    callback = function()
-      vim.bo.tabstop = 4
-      vim.bo.shiftwidth = 4
-      vim.bo.expandtab = true
-    end,
-  })
+  -- 基础设置（缩进等）
+  require("plugins.lang.go.settings").setup()
+  
+  -- 加载映射配置
+  require("plugins.lang.go.mapping").setup()
+  
+  -- 加载命令配置
+  require("plugins.lang.go.commands").setup()
 end
 
--- Return plugins directly (without wrapping in M.plugins())
+-- 插件定义（保持懒加载特性）
 return {
-  -- 1. Golang LSP
+  -- LSP 配置
   {
     "neovim/nvim-lspconfig",
     lazy = true,
@@ -24,20 +24,18 @@ return {
     end,
   },
 
-  -- 2. Golang DAP
+  -- 调试配置
   {
     "mfussenegger/nvim-dap",
     lazy = true,
     ft = "go",
-    dependencies = {
-      "leoluz/nvim-dap-go",
-    },
+    dependencies = "leoluz/nvim-dap-go",
     config = function()
       require("plugins.lang.go.dap").setup()
     end,
   },
 
-  -- 3. Golang 辅助插件
+  -- 辅助工具插件
   {
     "ray-x/go.nvim",
     lazy = true,
@@ -47,25 +45,7 @@ return {
       "ray-x/guihua.lua",
     },
     config = function()
-      require("go").setup({
-        gofmt = 'gopls',
-        goimport = 'gopls',
-        max_line_len = 120,
-        tag_transform = false,
-        test_dir = "",
-        verbose = false,
-        luasnip = true,
-      })
-      
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        pattern = "*.go",
-        callback = function()
-          require('go.format').goimport()
-        end,
-      })
-      
-      require("plugins.lang.go.mapping").setup()
-      require("plugins.lang.go.commands").setup()
+      require("plugins.lang.go.helper").setup()
     end,
   },
 }

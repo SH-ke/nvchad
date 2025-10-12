@@ -1,4 +1,4 @@
--- lua/plugins/lang/go/lsp.lua
+-- 修改 lua/plugins/lang/go/lsp.lua
 local M = {}
 
 function M.setup()
@@ -8,12 +8,12 @@ function M.setup()
     return
   end
 
-  -- 新 LSP API (Neovim 0.11+)
-  local cfg = vim.lsp.config({
-    name = "gopls",   -- ✅ 必须是字符串
+  -- 修正 LSP 配置格式（关键修复）
+  local cfg = {  -- 移除 vim.lsp.config() 包装，直接使用配置表
+    name = "gopls",  -- 确保这是字符串类型
     cmd = { "gopls" },
     filetypes = { "go", "gomod", "gowork", "gotmpl" },
-    root_dir = vim.fs.dirname(vim.fs.find({ "go.work", "go.mod", ".git" }, { upward = true })[1]),
+    root_dir = vim.fs.dirname(vim.fs.find({ "go.work", "go.mod", ".git" }, { upward = true })[1] or "."),
     settings = {
       gopls = {
         analyses = {
@@ -48,9 +48,9 @@ function M.setup()
       map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
       map("n", "<leader>f", function() vim.lsp.buf.format({ async = true }) end, opts)
     end,
-  })
+  }
 
-  -- 启动或附加
+  -- 启动 LSP 服务器（使用修正后的配置）
   vim.lsp.start(cfg)
 end
 

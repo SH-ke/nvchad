@@ -1,54 +1,147 @@
+-- lua/plugins/init.lua
+-- ===============================
+-- 插件主配置文件
+-- ===============================
+
+-- ===============================
+-- 基础 UI 增强类插件
+-- ===============================
 local plugins = {
+  -- 状态栏
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    opts = {
+      options = {
+        theme = "auto",
+        section_separators = "",
+        component_separators = "|",
+      },
+    },
+  },
 
-  -- UI 增强插件 (一般需要立即或非常早加载)
-  { "nvim-lualine/lualine.nvim", event = "VeryLazy" },
+  -- 缓冲区标签栏
   { "akinsho/bufferline.nvim", event = "VeryLazy", opts = {} },
-  { "glepnir/dashboard-nvim", event = "VimEnter", opts = {} }, -- 启动页
-  { "nvim-tree/nvim-tree.lua", cmd = { "NvimTreeToggle", "NvimTreeFindFile" }, opts = {} }, -- 按命令加载
-  { "lewis6991/gitsigns.nvim", event = "BufReadPre", opts = {} }, -- 文件读取前加载 (依赖于 git 文件)
-  { "tversteeg/registers.nvim", lazy = true, cmd = "Registers" }, -- 按命令加载
-  { "folke/noice.nvim", event = "VeryLazy", opts = {} }, -- 通知/消息美化，尽早加载
-  { "lukas-reineke/indent-blankline.nvim", event = "BufReadPost", opts = {} }, -- 缩进线，文件打开后加载
 
-  -- 核心功能插件
-  { "williamboman/mason.nvim", lazy = false, opts = require "plugins.mason" }, -- Mason 必须尽早加载
-  { "neovim/nvim-lspconfig", lazy = true, ft = { "lua", "python", "c", "cpp", "go", "html", "css", "markdown", "rust", "typst", "latex" }, config = function() require "configs.lspconfig" end }, -- 仅在相关文件类型时加载
-  { "nvim-treesitter/nvim-treesitter", opts = require "plugins.treesitter", event = "BufReadPost" }, -- 文件打开后加载
+  -- 启动页
+  { "glepnir/dashboard-nvim", event = "VimEnter", opts = {} },
 
-  -- 格式化插件 (替代 null-ls)
-  { "stevearc/conform.nvim", event = "BufWritePre", opts = require "configs.conform" }, -- 写入文件前加载
+  -- 文件树
+  {
+    "nvim-tree/nvim-tree.lua",
+    cmd = { "NvimTreeToggle", "NvimTreeFindFile" },
+    opts = {
+      view = { width = 35 },
+      renderer = { highlight_opened_files = "all" },
+    },
+  },
 
-  -- LeetCode
-  { "kawre/leetcode.nvim", lazy = true, cmd = "LeetCode", opts = require "plugins.leetcode" }, -- 按命令加载
+  -- Git 信息提示
+  { "lewis6991/gitsigns.nvim", event = "BufReadPre", opts = {} },
+
+  -- 寄存器查看器
+  { "tversteeg/registers.nvim", cmd = "Registers", lazy = true },
+
+  -- 消息增强
+  { "folke/noice.nvim", event = "VeryLazy", opts = {} },
+
+  -- 通知弹窗
+  {
+    "rcarriga/nvim-notify",
+    event = "VeryLazy",
+    config = function()
+      require("notify").setup({
+        stages = "fade_in_slide_out",
+        timeout = 2000,
+        render = "default",
+      })
+      vim.notify = require("notify")
+    end,
+  },
+
+  -- 缩进线
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",  -- 新版入口模块
+    event = "BufReadPost",
+    opts = {
+      indent = {
+        char = "│",
+        tab_char = "│",
+      },
+      whitespace = {
+        remove_blankline_trail = true,
+      },
+      scope = {
+        enabled = true,
+        show_start = false,
+        show_end = false,
+      },
+    },
+  },
 }
 
--- 定义添加插件的函数
+-- ===============================
+-- 核心功能插件
+-- ===============================
+table.insert(plugins, {
+  "williamboman/mason.nvim",
+  lazy = false, -- Mason 需最早加载
+  opts = require("plugins.mason"),
+})
+
+table.insert(plugins, {
+  "neovim/nvim-lspconfig",
+  ft = { "lua", "python", "c", "cpp", "go", "html", "css", "markdown", "rust", "typst", "latex" },
+  config = function()
+    require("configs.lspconfig")
+  end,
+})
+
+table.insert(plugins, {
+  "nvim-treesitter/nvim-treesitter",
+  event = "BufReadPost",
+  opts = require("plugins.treesitter"),
+})
+
+-- ===============================
+-- 格式化 (Conform)
+-- ===============================
+table.insert(plugins, {
+  "stevearc/conform.nvim",
+  event = "BufWritePre",
+  opts = require("configs.conform"),
+})
+
+-- ===============================
+-- LeetCode 插件
+-- ===============================
+table.insert(plugins, {
+  "kawre/leetcode.nvim",
+  cmd = "LeetCode",
+  lazy = true,
+  opts = require("plugins.leetcode"),
+})
+
+-- ===============================
+-- 动态加载语言插件
+-- ===============================
 local function add_plugins(newPlugins)
-    -- 确保 newPlugins 是一个 table
-    if type(newPlugins) == 'table' then
-        for _, plugin in ipairs(newPlugins) do
-            table.insert(plugins, plugin)
-        end
+  if type(newPlugins) == "table" then
+    for _, plugin in ipairs(newPlugins) do
+      table.insert(plugins, plugin)
     end
+  end
 end
 
-add_plugins(base_plugins)
+-- 按需加载各语言插件
+add_plugins(require("plugins.lang.python"))
+add_plugins(require("plugins.lang.cpp"))
+add_plugins(require("plugins.lang.go"))
+add_plugins(require("plugins.lang.web"))
+add_plugins(require("plugins.lang.misc"))
 
--- 加载语言隔离插件
-add_plugins(require('plugins.lang.python'))
-add_plugins(require('plugins.lang.cpp'))
--- add_plugins(require('plugins.lang.go'))
-add_plugins(require('plugins.lang.web'))
-add_plugins(require('plugins.lang.misc'))
-
--- 注意：原始文件中的以下内容需要移到 plugins/init.lua 中
--- local plugins = {
---   { "stevearc/conform.nvim", ... },
---   { "neovim/nvim-lspconfig", ... },
--- }
--- 已经将这些移至 plugins/init.lua 并设置了 event/ft 进行延迟加载。
-
--- 语言相关的插件将通过 require 动态加载并添加到这个列表中
--- 在 init.lua 中实现合并逻辑。
-
+-- ===============================
+-- 返回最终插件列表
+-- ===============================
 return plugins
