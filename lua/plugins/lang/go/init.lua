@@ -20,7 +20,7 @@ return {
     lazy = true,
     ft = "go",
     config = function()
-      -- require("plugins.lang.go.lsp").setup()
+      require("plugins.lang.go.lsp").setup()
     end,
   },
 

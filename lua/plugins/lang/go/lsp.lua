@@ -2,12 +2,18 @@
 local M = {}
 
 function M.setup()
-  -- 使用新的 LSP 配置 API（Neovim 0.11+）
-  local config = vim.lsp.config({
-    name = "gopls",
+  -- 确保 gopls 存在
+  if vim.fn.executable("gopls") == 0 then
+    vim.notify("gopls not found in PATH", vim.log.levels.WARN)
+    return
+  end
+
+  -- 新 LSP API (Neovim 0.11+)
+  local cfg = vim.lsp.config({
+    name = "gopls",   -- ✅ 必须是字符串
     cmd = { "gopls" },
     filetypes = { "go", "gomod", "gowork", "gotmpl" },
-    root_markers = { "go.work", "go.mod", ".git" },
+    root_dir = vim.fs.dirname(vim.fs.find({ "go.work", "go.mod", ".git" }, { upward = true })[1]),
     settings = {
       gopls = {
         analyses = {
@@ -21,9 +27,8 @@ function M.setup()
       },
     },
 
-    -- 附加时回调（格式化、键位绑定等）
     on_attach = function(client, bufnr)
-      -- 启用格式化功能（如果可用）
+      -- 自动格式化
       if client.server_capabilities.documentFormattingProvider then
         vim.api.nvim_create_autocmd("BufWritePre", {
           buffer = bufnr,
@@ -33,7 +38,7 @@ function M.setup()
         })
       end
 
-      -- 基本 LSP 快捷键
+      -- 基本快捷键
       local opts = { noremap = true, silent = true, buffer = bufnr }
       local map = vim.keymap.set
       map("n", "gd", vim.lsp.buf.definition, opts)
@@ -43,12 +48,10 @@ function M.setup()
       map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
       map("n", "<leader>f", function() vim.lsp.buf.format({ async = true }) end, opts)
     end,
-
-    capabilities = vim.lsp.protocol.make_client_capabilities(),
   })
 
-  -- 启动或附加到当前 buffer
-  vim.lsp.start(config)
+  -- 启动或附加
+  vim.lsp.start(cfg)
 end
 
 return M
