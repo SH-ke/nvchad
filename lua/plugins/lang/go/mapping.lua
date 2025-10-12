@@ -1,10 +1,11 @@
+-- 修改后的 mapping.lua 完整内容
 local M = {}
 
 function M.setup()
   local map = vim.keymap.set
   
   -- LSP 相关映射
-  map('n', '<leader>gf', vim.lsp.buf.format, { desc = "Format Go code" })
+  map('n', '<leader>gf', vim.lsp.buf.format, { desc = "Format code" })  -- 统一格式快捷键
   
   -- DAP 调试映射
   map('n', '<leader>db', require('dap').toggle_breakpoint, { desc = "Toggle breakpoint" })
