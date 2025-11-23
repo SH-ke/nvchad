@@ -10,6 +10,7 @@ return {
       not_loaded = "",
     },
   },
+  rocks = { enabled = false },
 
   performance = {
     rtp = {

@@ -43,7 +43,27 @@ local plugins = {
   { "tversteeg/registers.nvim", cmd = "Registers", lazy = true },
 
   -- 消息增强
-  { "folke/noice.nvim", event = "VeryLazy", opts = {} },
+  -- { "folke/noice.nvim", event = "VeryLazy", opts = {} },
+  -- 找到你 Lazy.nvim 中 noice.nvim 的配置，添加 lsp 段
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- 其他已有的配置（比如 cmdline、presets 等）
+      lsp = {
+        -- 将 LSP 的 markdown 格式化交给 Noice 处理
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true, -- 可选：让 cmp 补全的文档也用 Noice 显示
+        },
+      },
+    },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify", -- 确保已安装此依赖
+    },
+  },
 
   -- 通知弹窗
   {
