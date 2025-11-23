@@ -161,6 +161,8 @@ add_plugins(require("plugins.lang.go"))
 add_plugins(require("plugins.lang.web"))
 add_plugins(require("plugins.lang.misc"))
 
+-- dap
+add_plugins(require("plugins.dap"))
 -- ===============================
 -- 返回最终插件列表
 -- ===============================

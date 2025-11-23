@@ -1,24 +1,27 @@
-local plugins = {
+return {
   "williamboman/mason.nvim",
-  install_root_dir = vim.fn.stdpath("data") .. "/mason",
+  dependencies = {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+  },
   opts = {
     ensure_installed = {
       "black",
       "debugpy",
-      "mypy",
-      "ruff",
-      "pylsp",
       "python-lsp-server",
       "clangd",
       "clang-format",
       "codelldb",
-      "gopls",        -- Golang LSP
-      "goimports",    -- Golang 格式化/导入
-      "delve",        -- Golang 调试器
+      "gopls",
+      "goimports-reviser",
+      "delve",
     },
-    run_on_start = true,
-    log_level = vim.log.levels.DEBUG,
   },
+  config = function(_, opts)
+    require("mason").setup(opts)
+    require("mason-tool-installer").setup({
+      ensure_installed = opts.ensure_installed,
+      run_on_start = true,        -- ⬅ 让它在启动时自动安装
+      log_level = vim.log.levels.DEBUG,
+    })
+  end,
 }
-
-return plugins

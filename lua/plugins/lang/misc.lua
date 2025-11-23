@@ -1,44 +1,30 @@
 -- lua/plugins/lang/misc.lua
-local plugins = {
-  -- Markdown LSP
-  {
-    "neovim/nvim-lspconfig",
-    lazy = true,
-    ft = { "markdown" },
-    config = function()
-      require("lspconfig").marksman.setup {}
-    end,
-  },
 
-  -- Rust LSP (rust_analyzer)
-  {
-    "neovim/nvim-lspconfig",
-    lazy = true,
-    ft = { "rust" },
-    config = function()
-      require("lspconfig").rust_analyzer.setup {}
-    end,
-  },
+return {
+  "neovim/nvim-lspconfig",
+  lazy = true,
+  event = { "BufReadPost", "BufNewFile" },
 
-  -- Typst LSP
-  {
-    "neovim/nvim-lspconfig",
-    lazy = true,
-    ft = { "typst" },
-    config = function()
-      require("lspconfig").typst_lsp.setup {}
-    end,
-  },
+  config = function()
+    -- filetype → lsp server 映射表
+    local ft_map = {
+      markdown = "marksman",
+      rust = "rust_analyzer",
+      typst = "typst_lsp",
+      latex = "texlab",
+      tex = "texlab",
+    }
 
-  -- LaTeX LSP
-  {
-    "neovim/nvim-lspconfig",
-    lazy = true,
-    ft = { "latex" },
-    config = function()
-      require("lspconfig").texlab.setup {}
-    end,
-  },
+    -- 自动在合适 filetype 时启用 LSP
+    vim.api.nvim_create_autocmd("FileType", {
+      callback = function(args)
+        local ft = args.match
+        local server = ft_map[ft]
+        if not server then return end
+
+        -- 使用 Neovim 0.11+ 新 API 启动 LSP
+        vim.lsp.enable(server)
+      end,
+    })
+  end,
 }
-
-return plugins
